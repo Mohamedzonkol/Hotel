@@ -31,16 +31,27 @@
                 <th>
                     Occupancy
                 </th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <th>@item.Name</th>
-                    <th>@item.Price</th>
-                    <th>@item.Sqft</th>
-                    <th>@item.Occupancy</th>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.Sqft</td>
+                    <td>@item.Occupancy</td>
+                    <td>
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-controller="Villa" asp-action="Update" asp-route-villaId="@item.Id" class="btn btn-success mx-2">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                            <a asp-controller="Villa" asp-action="Delete" asp-route-villaId="@item.Id" class="btn btn-danger mx-2">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                            </a>
+                        </div>
+                    </td>
                 </tr>
             }
             </tbody>
