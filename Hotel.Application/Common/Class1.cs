@@ -1,4 +1,4 @@
-﻿namespace Hotel.Application
+﻿namespace Hotel.Application.Common
 {
     public class Class1
     {
