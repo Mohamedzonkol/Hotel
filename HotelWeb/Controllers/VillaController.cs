@@ -17,9 +17,6 @@ namespace HotelWeb.Controllers
         {
             return View();
         }
-
-
-
         [HttpPost]
         public IActionResult Create(Villa villa)
         {
@@ -82,15 +79,9 @@ namespace HotelWeb.Controllers
                 return RedirectToAction("Index", "Villa");
             }
             TempData["Error"] = "The Villa Can Not Be Deleted .";
-
             return View();
         }
 
-                return RedirectToAction("Index", "Villa");
-            }
-            return View();
-
-        }
 
     }
 }

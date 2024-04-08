@@ -11,25 +11,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
     <style>
- 
-
-    <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
-    <style>
-        /* Define dark mode styles */
 
         :root {
             --bg-color: white;
             --text-color: black;
         }
-
-
-        /* Dark mode */
-
         body.dark-mode {
             --bg-color: #212529;
             --text-color: white;
         }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -50,7 +40,6 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -62,15 +51,6 @@
                             <a class="nav-link text-secondary" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
                         </li>   
                         <li class="nav-item ms-auto"> 
-
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-controller="Villa" asp-action="Index">Villa</a>
-                        </li>   
-                        <li class="nav-item ms-auto"> <!-- Add ms-auto class to push it to the right -->
 
                             <button class="nav-link btn btn-link" onclick="toggleDarkMode()">Toggle Dark Mode</button>
                         </li>
@@ -93,34 +73,19 @@
         </div>
 </footer>
 <script>
+     
         function toggleDarkMode() {
             const body = document.body;
             body.classList.toggle("dark-mode");
-
-<footer class="border-top footer ">
-    <div class="container">
-        &copy; 2024 - HotelWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
-<script>
-        // Function to toggle dark mode
-        function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle("dark-mode");
-            // You can also store the user's preference in local storage to persist the theme choice across sessions
 
             const isDarkMode = body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDarkMode);
         }
-
-        // Check if the user has previously set dark mode preference
-
         const isDarkMode = localStorage.getItem("darkMode") === "true";
         if (isDarkMode) {
             document.body.classList.add("dark-mode");
         }
     </script>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
