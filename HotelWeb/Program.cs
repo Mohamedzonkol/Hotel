@@ -1,3 +1,4 @@
+using Hotel.Infrastructure;
 using Hotel.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+#region Depenancy Injection
+builder.Services.AddInfrastructreDependencies();
+#endregion
 
 
 var app = builder.Build();
