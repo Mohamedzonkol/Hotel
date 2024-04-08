@@ -8,7 +8,7 @@ namespace Hotel.Infrastructure
     {
         public static IServiceCollection AddInfrastructreDependencies(this IServiceCollection service)
         {
-            service.AddScoped<IVillaRepository, VillaRepository>();
+            service.AddScoped<IUnitOfWork, UnitOfWork>();
             return service;
         }
     }

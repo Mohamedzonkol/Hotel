@@ -1,33 +1,27 @@
-﻿using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Data;
+﻿using Hotel.Application.Common.InterFaces;
+using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-
-
 namespace HotelWeb.Controllers
 {
-    public class VillaController(ApplicationDbContext context) : Controller
+    public class VillaController(IUnitOfWork unit) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(context.Villas.ToList());
+            return View(unit.VillaRepository.GetAllAsync());
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Villa villa)
+        public async Task<IActionResult> Create(Villa villa)
         {
             if (villa.Name == villa.Description)
                 ModelState.AddModelError("", "The Description Can Not Match The Name");
 
             if (ModelState.IsValid)
             {
-                context.Villas.Add(villa);
-                context.SaveChanges();
-
+                await unit.VillaRepository.AddAsync(villa);
                 TempData["Success"] = "The Villa Has Been Created Successfully .";
                 return RedirectToAction("Index", "Villa");
             }
@@ -37,19 +31,17 @@ namespace HotelWeb.Controllers
         }
         public async Task<IActionResult> Update(int villaId)
         {
-            var villa = await context.Villas.FirstOrDefaultAsync(x => x.Id == villaId);
+            var villa = await unit.VillaRepository.GetAsync(x => x.Id == villaId);
             if (villa == null)
                 return RedirectToAction("Error", "Home");
             return View(villa);
         }
-
         [HttpPost]
         public async Task<IActionResult> Update(Villa villa)
         {
             if (ModelState.IsValid && villa.Id > 0)
             {
-                context.Villas.Update(villa);
-                await context.SaveChangesAsync();
+                await unit.VillaRepository.UpdateAsync(villa);
                 TempData["Success"] = "The Villa Has Been Updated Successfully .";
                 return RedirectToAction("Index", "Villa");
             }
@@ -60,7 +52,7 @@ namespace HotelWeb.Controllers
 
         public async Task<IActionResult> Delete(int villaId)
         {
-            var villa = await context.Villas.FirstOrDefaultAsync(x => x.Id == villaId);
+            var villa = await unit.VillaRepository.GetAsync(x => x.Id == villaId);
             if (villa == null)
                 return RedirectToAction("Error", "Home");
             return View(villa);
@@ -69,12 +61,11 @@ namespace HotelWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Villa villa)
         {
-            var villaObj = await context.Villas.FirstOrDefaultAsync(x => x.Id == villa.Id);
+            var villaObj = await unit.VillaRepository.GetAsync(x => x.Id == villa.Id);
 
             if (villaObj is not null)
             {
-                context.Villas.Remove(villaObj);
-                await context.SaveChangesAsync();
+                await unit.VillaRepository.RemoveAsync(villaObj);
                 TempData["Success"] = "The Villa Has Been Deleted Successfully .";
                 return RedirectToAction("Index", "Villa");
             }

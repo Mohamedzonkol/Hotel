@@ -1,23 +1,24 @@
-﻿using Hotel.Infrastructure.Data;
+﻿using Hotel.Application.Common.InterFaces;
 using HotelWeb.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace HotelWeb.Controllers
 {
-    public class VillaNumberController(ApplicationDbContext context) : Controller
+    public class VillaNumberController(IUnitOfWork unit) : Controller
     {
-        public IActionResult Index()
+        public Task<IActionResult> Index()
         {
-            return View(context.VillaNumbers
-                .Include(x => x.Villa).ToList());
+            var villaNumber =
+                 unit.VillaNumberRepository.GetAllAsync(includeProperty: "Villa");
+            return Task.FromResult<IActionResult>(View(villaNumber));
+            ;
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             VillaNumberViewModel vm = new VillaNumberViewModel
             {
-                VillaList = context.Villas.ToList().Select(x => new SelectListItem
+                VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -26,27 +27,26 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
-        public IActionResult Create(VillaNumberViewModel obj)
+        public async Task<IActionResult> Create(VillaNumberViewModel obj)
         {
-            bool roomNumberExist = context.VillaNumbers.Any(x => x.Villa_Number == obj.VillaNumber.Villa_Number);
+            bool roomNumberExist = await unit.VillaNumberRepository.AnyAsync(x => x.Villa_Number == obj.VillaNumber.Villa_Number);
             if (ModelState.IsValid && !roomNumberExist)
             {
-                context.VillaNumbers.Add(obj.VillaNumber);
-                context.SaveChanges();
+                await unit.VillaNumberRepository.AddAsync(obj.VillaNumber);
                 TempData["Success"] = "The Villa Number Has Been Created Successfully .";
                 return RedirectToAction("Index", "VillaNumber");
             }
             else if (roomNumberExist)
             {
                 TempData["Error"] = "The Villa Number Already Exist .";
-                obj.VillaList = context.Villas.ToList().Select(x => new SelectListItem
+                obj.VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 });
                 return View(obj);
             }
-            obj.VillaList = context.Villas.ToList().Select(x => new SelectListItem
+            obj.VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
@@ -55,32 +55,32 @@ namespace HotelWeb.Controllers
             return View(obj);
 
         }
-        public IActionResult Update(int villaNumberId)
+        public async Task<IActionResult> Update(int villaNumberId)
         {
             VillaNumberViewModel vm = new VillaNumberViewModel
             {
-                VillaList = context.Villas.ToList().Select(x => new SelectListItem
+                VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                VillaNumber = context.VillaNumbers.FirstOrDefault(x => x.Villa_Number == villaNumberId)
+                VillaNumber = await unit.VillaNumberRepository.GetAsync(x => x.Villa_Number == villaNumberId)
             };
             if (vm.VillaNumber == null)
                 return RedirectToAction("Error", "Home");
             return View(vm);
         }
         [HttpPost]
-        public IActionResult Update(VillaNumberViewModel obj)
+        public async Task<IActionResult> Update(VillaNumberViewModel obj)
         {
             if (ModelState.IsValid)
             {
-                context.VillaNumbers.Update(obj.VillaNumber);
-                context.SaveChanges();
+                await unit.VillaNumberRepository.UpdateAsync(obj.VillaNumber);
+
                 TempData["Success"] = "The Villa Number Has Been Updated Successfully .";
                 return RedirectToAction("Index", "VillaNumber");
             }
-            obj.VillaList = context.Villas.ToList().Select(x => new SelectListItem
+            obj.VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
@@ -88,29 +88,28 @@ namespace HotelWeb.Controllers
             TempData["Error"] = "The Villa Number Can Not Be Updated .";
             return View(obj);
         }
-        public IActionResult Delete(int villaNumberId)
+        public async Task<IActionResult> Delete(int villaNumberId)
         {
             VillaNumberViewModel vm = new VillaNumberViewModel
             {
-                VillaList = context.Villas.ToList().Select(x => new SelectListItem
+                VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                VillaNumber = context.VillaNumbers.FirstOrDefault(x => x.Villa_Number == villaNumberId)
+                VillaNumber = await unit.VillaNumberRepository.GetAsync(x => x.Villa_Number == villaNumberId)
             };
             if (vm.VillaNumber == null)
                 return RedirectToAction("Error", "Home");
             return View(vm);
         }
         [HttpPost]
-        public IActionResult Delete(VillaNumberViewModel obj)
+        public async Task<IActionResult> Delete(VillaNumberViewModel obj)
         {
-            var villaNumber = context.VillaNumbers.FirstOrDefault(x => x.Villa_Number == obj.VillaNumber.Villa_Number);
+            var villaNumber = await unit.VillaNumberRepository.GetAsync(x => x.Villa_Number == obj.VillaNumber.Villa_Number);
             if (villaNumber is not null)
             {
-                context.VillaNumbers.Remove(villaNumber);
-                context.SaveChanges();
+                await unit.VillaNumberRepository.RemoveAsync(villaNumber);
                 TempData["Success"] = "The Villa Number Has Been Deleted Successfully .";
                 return RedirectToAction("Index", "VillaNumber");
             }
