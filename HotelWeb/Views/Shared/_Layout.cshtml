@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
     <style>
-        /* Define dark mode styles */
+ 
         :root {
             --bg-color: white;
             --text-color: black;
         }
 
-        /* Dark mode */
         body.dark-mode {
             --bg-color: #212529;
             --text-color: white;
@@ -32,7 +32,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HotelWeb</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/resort.png" style="width: 35px"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -47,8 +47,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" asp-controller="Villa" asp-action="Index">Villa</a>
+                        </li>    
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
                         </li>   
-                        <li class="nav-item ms-auto"> <!-- Add ms-auto class to push it to the right -->
+                        <li class="nav-item ms-auto"> 
                             <button class="nav-link btn btn-link" onclick="toggleDarkMode()">Toggle Dark Mode</button>
                         </li>
                     </ul>
@@ -58,26 +61,24 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+        <partial name="_Notifcation"/>
             @RenderBody()
         </main>
     </div>
 
-<footer class="border-top footer ">
-    <div class="container">
-        &copy; 2024 - HotelWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
+<footer class="border-top footer">
+    <div class="container text-center">
+        Made With <i class="bi bi-heart-fill"></i> By Mohamed Zonkol
+        </div>
 </footer>
 <script>
-        // Function to toggle dark mode
         function toggleDarkMode() {
             const body = document.body;
             body.classList.toggle("dark-mode");
-            // You can also store the user's preference in local storage to persist the theme choice across sessions
             const isDarkMode = body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDarkMode);
         }
 
-        // Check if the user has previously set dark mode preference
         const isDarkMode = localStorage.getItem("darkMode") === "true";
         if (isDarkMode) {
             document.body.classList.add("dark-mode");

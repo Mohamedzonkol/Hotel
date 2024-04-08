@@ -11,12 +11,10 @@ namespace HotelWeb.Controllers
         {
             return View(context.Villas.ToList());
         }
-
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult Create(Villa villa)
         {
@@ -27,13 +25,13 @@ namespace HotelWeb.Controllers
             {
                 context.Villas.Add(villa);
                 context.SaveChanges();
+                TempData["Success"] = "The Villa Has Been Created Successfully .";
                 return RedirectToAction("Index", "Villa");
             }
-
+            TempData["Error"] = "The Villa Can Not Be Created .";
             return View();
 
         }
-
         public async Task<IActionResult> Update(int villaId)
         {
             var villa = await context.Villas.FirstOrDefaultAsync(x => x.Id == villaId);
@@ -49,8 +47,10 @@ namespace HotelWeb.Controllers
             {
                 context.Villas.Update(villa);
                 await context.SaveChangesAsync();
+                TempData["Success"] = "The Villa Has Been Updated Successfully .";
                 return RedirectToAction("Index", "Villa");
             }
+            TempData["Error"] = "The Villa Can Not Be Updated .";
 
             return View();
         }
@@ -72,8 +72,10 @@ namespace HotelWeb.Controllers
             {
                 context.Villas.Remove(villaObj);
                 await context.SaveChangesAsync();
+                TempData["Success"] = "The Villa Has Been Deleted Successfully .";
                 return RedirectToAction("Index", "Villa");
             }
+            TempData["Error"] = "The Villa Can Not Be Deleted .";
 
             return View();
         }
