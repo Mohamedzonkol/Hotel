@@ -3,6 +3,8 @@ using Hotel.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
+
 namespace HotelWeb.Controllers
 {
     public class VillaController(ApplicationDbContext context) : Controller
@@ -15,6 +17,9 @@ namespace HotelWeb.Controllers
         {
             return View();
         }
+
+
+
         [HttpPost]
         public IActionResult Create(Villa villa)
         {
@@ -25,6 +30,7 @@ namespace HotelWeb.Controllers
             {
                 context.Villas.Add(villa);
                 context.SaveChanges();
+
                 TempData["Success"] = "The Villa Has Been Created Successfully .";
                 return RedirectToAction("Index", "Villa");
             }
@@ -79,5 +85,12 @@ namespace HotelWeb.Controllers
 
             return View();
         }
+
+                return RedirectToAction("Index", "Villa");
+            }
+            return View();
+
+        }
+
     }
 }
