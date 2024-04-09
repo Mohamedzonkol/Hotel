@@ -4,5 +4,6 @@
     {
         IVillaRepository VillaRepository { get; }
         IVillaNumberRepository VillaNumberRepository { get; }
+        IAmenityRepository AmenityRepository { get; }
     }
 }

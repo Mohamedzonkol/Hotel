@@ -3,7 +3,7 @@ using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace HotelWeb.Controllers
 {
-    public class VillaController(IUnitOfWork unit) : Controller
+    public class VillaController(IUnitOfWork unit, IWebHostEnvironment webHost) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -18,9 +18,21 @@ namespace HotelWeb.Controllers
         {
             if (villa.Name == villa.Description)
                 ModelState.AddModelError("", "The Description Can Not Match The Name");
-
             if (ModelState.IsValid)
             {
+                if (villa.Image is not null)
+                {
+                    string fileName =
+                        Guid.NewGuid().ToString() + Path.GetExtension(villa.Image.FileName);
+                    string imagePath = Path.Combine(webHost.WebRootPath, @"Images\Villa");
+                    await using var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                    await villa.Image.CopyToAsync(fileStream);
+                    villa.ImageUrl = @"\Images\Villa\" + fileName;
+                }
+                else
+                {
+                    villa.ImageUrl = "https://placehold.co/600x400"; //default image
+                }
                 await unit.VillaRepository.AddAsync(villa);
                 TempData["Success"] = "The Villa Has Been Created Successfully .";
                 return RedirectToAction("Index", "Villa");
@@ -41,6 +53,21 @@ namespace HotelWeb.Controllers
         {
             if (ModelState.IsValid && villa.Id > 0)
             {
+                if (villa.Image is not null)
+                {
+                    string fileName =
+                        Guid.NewGuid().ToString() + Path.GetExtension(villa.Image.FileName);
+                    string imagePath = Path.Combine(webHost.WebRootPath, @"Images\Villa");
+                    if (!string.IsNullOrEmpty(villa.ImageUrl))
+                    {
+                        string oldImagePath = Path.Combine(webHost.WebRootPath, villa.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                            System.IO.File.Delete(oldImagePath);
+                    }
+                    await using var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                    await villa.Image.CopyToAsync(fileStream);
+                    villa.ImageUrl = @"\Images\Villa\" + fileName;
+                }
                 await unit.VillaRepository.UpdateAsync(villa);
                 TempData["Success"] = "The Villa Has Been Updated Successfully .";
                 return RedirectToAction("Index", "Villa");
@@ -65,6 +92,12 @@ namespace HotelWeb.Controllers
 
             if (villaObj is not null)
             {
+                if (!string.IsNullOrEmpty(villaObj.ImageUrl))
+                {
+                    string oldImagePath = Path.Combine(webHost.WebRootPath, villaObj.ImageUrl.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath))
+                        System.IO.File.Delete(oldImagePath);
+                }
                 await unit.VillaRepository.RemoveAsync(villaObj);
                 TempData["Success"] = "The Villa Has Been Deleted Successfully .";
                 return RedirectToAction("Index", "Villa");

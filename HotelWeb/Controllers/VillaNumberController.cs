@@ -12,7 +12,7 @@ namespace HotelWeb.Controllers
             var villaNumber =
                  unit.VillaNumberRepository.GetAllAsync(includeProperty: "Villa");
             return Task.FromResult<IActionResult>(View(villaNumber));
-            ;
+
         }
         public async Task<IActionResult> Create()
         {

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelWeb.ViewModel
 {
-    public class VillaNumberViewModel
+    public class AmenityViewModel
     {
-        public VillaNumber? VillaNumber { get; set; }
+        public Amenity? Amenity { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem>? VillaList { get; set; }
     }
