@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" >
+<html lang="en" data-bs-theme="dark" >
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,25 +11,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
     <style>
-
-        :root {
-            --bg-color: white;
-            --text-color: black;
+        .search-form {
+            margin-left: auto; 
+            max-height: 40px;
+            width: 500px;
         }
-        body.dark-mode {
-            --bg-color: #212529;
-            --text-color: white;
+        .Button {
+            width: 250px;
         }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
+     
     </style>
     </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/resort.png" style="width: 35px"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -41,30 +36,44 @@
                         <li class="nav-item">
                             <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-controller="Villa" asp-action="Index">Villa</a>
-                        </li>    
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
-                        </li> <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-controller="Amenity" asp-action="Index">Amenity</a>
-                        </li>   
-                        <li class="nav-item ms-auto"> 
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Content Management
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Villa" asp-action="Index">Villa</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Amenity" asp-action="Index">Amenity</a>
+                                </li>  
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" onclick="toggleDarkMode()">Dark Theme</a>
+                                </li>
 
-                            <button class="nav-link btn btn-link" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-                        </li>
+                            </ul>
+                        </li>  
+                        <form class="d-flex search-form" role="search">
+                            <input class="form-control me-3" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success Button" type="submit">Search</button>
+                        </form>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-        <partial name="_Notifcation"/>
-            @RenderBody()
+    <div class="">
+        <main role="main" >
+            <partial name="_Notifcation"/>
+            <div class="render-section-content">
+                @RenderBody()
+            </div>
         </main>
     </div>
 
@@ -77,19 +86,15 @@
 <script>
      
         function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle("dark-mode");
-
-            const isDarkMode = body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDarkMode);
-        }
-        const isDarkMode = localStorage.getItem("darkMode") === "true";
-        if (isDarkMode) {
-            document.body.classList.add("dark-mode");
+            const htmlElement = document.querySelector('html');
+            const currentTheme = htmlElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlElement.setAttribute('data-bs-theme', newTheme);
+          
         }
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

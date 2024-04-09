@@ -1,19 +1,21 @@
+using Hotel.Application.Common.InterFaces;
+using HotelWeb.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelWeb.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IUnitOfWork unit) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public async Task<IActionResult> Index()
         {
-            _logger = logger;
-        }
+            HomeViewModel vm = new()
+            {
+                VillaList = unit.VillaRepository.GetAllAsync(includeProperty: "VillaAmenities"),
+                Nights = 1,
+                CheckInData = DateOnly.FromDateTime(DateTime.Now)
+            };
 
-        public IActionResult Index()
-        {
-            return View();
+            return View(vm);
         }
 
         public IActionResult Privacy()
