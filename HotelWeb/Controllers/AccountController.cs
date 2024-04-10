@@ -23,8 +23,9 @@ namespace HotelWeb.Controllers
 
             return View(vm);
         }
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
             if (!roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
             {
                 roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
@@ -37,40 +38,46 @@ namespace HotelWeb.Controllers
                 {
                     Text = x.Name,
                     Value = x.Name
-                })
+                }),
+                ReturnUrl = returnUrl
             };
 
             return View(vm);
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerVM)
         {
-            ApplicationUser user = new()
+            if (ModelState.IsValid)
             {
-                Name = registerVM.UserName,
-                Email = registerVM.Email,
-                PhoneNumber = registerVM.PhoneNumber,
-                NormalizedEmail = registerVM.Email.ToUpper(),
-                EmailConfirmed = true,
-                UserName = registerVM.UserName,
-                CreatedAt = DateTime.Now
-            };
-            var result = await userManager.CreateAsync(user, registerVM.Password);
-            if (result.Succeeded)
-            {
-                if (!string.IsNullOrEmpty(registerVM.Role))
-                    await userManager.AddToRoleAsync(user, registerVM.Role);
-                else
-                    await userManager.AddToRoleAsync(user, SD.Role_Customer);
-                await signInManager.SignInAsync(user, isPersistent: false);
-                if (string.IsNullOrEmpty(registerVM.ReturnUrl))
-                    return RedirectToAction("Index", "Home");
-                else
-                    return LocalRedirect(registerVM.ReturnUrl);
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
+                ApplicationUser user = new()
+                {
+                    Name = registerVM.UserName,
+                    Email = registerVM.Email,
+                    PhoneNumber = registerVM.PhoneNumber,
+                    NormalizedEmail = registerVM.Email.ToUpper(),
+                    EmailConfirmed = true,
+                    UserName = registerVM.UserName,
+                    CreatedAt = DateTime.Now
+                };
+                var result = await userManager.CreateAsync(user, registerVM.Password);
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(registerVM.Role))
+                        await userManager.AddToRoleAsync(user, registerVM.Role);
+                    else
+                        await userManager.AddToRoleAsync(user, SD.Role_Customer);
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    if (string.IsNullOrEmpty(registerVM.ReturnUrl))
+                        return RedirectToAction("Index", "Home");
+                    else
+                        return LocalRedirect(registerVM.ReturnUrl);
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
 
             registerVM.RoleList = roleManager.Roles.Select(x => new SelectListItem
@@ -81,13 +88,15 @@ namespace HotelWeb.Controllers
             return View(registerVM);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel LoginVM)
         {
             if (ModelState.IsValid)
             {
+                var user = await userManager.FindByEmailAsync(LoginVM.Email);
                 var result =
-                    await signInManager.PasswordSignInAsync(LoginVM.Email, LoginVM.Password, LoginVM.RememberMe, false);
+                    await signInManager.PasswordSignInAsync(user.Name, LoginVM.Password, LoginVM.RememberMe, false);
                 if (result.Succeeded)
                 {
                     if (string.IsNullOrEmpty(LoginVM.ReturnUrl))
@@ -101,6 +110,16 @@ namespace HotelWeb.Controllers
                 }
             }
             return View(LoginVM);
+        }
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

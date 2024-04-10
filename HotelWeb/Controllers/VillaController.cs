@@ -1,8 +1,10 @@
 ﻿using Hotel.Application.Common.InterFaces;
 using Hotel.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace HotelWeb.Controllers
 {
+    [Authorize]
     public class VillaController(IUnitOfWork unit, IWebHostEnvironment webHost) : Controller
     {
         public async Task<IActionResult> Index()

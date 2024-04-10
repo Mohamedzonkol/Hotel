@@ -1,10 +1,13 @@
 ﻿using Hotel.Application.Common.InterFaces;
+using Hotel.Application.Utility;
 using HotelWeb.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelWeb.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class AmenityController(IUnitOfWork unit) : Controller
     {
         public Task<IActionResult> Index()
