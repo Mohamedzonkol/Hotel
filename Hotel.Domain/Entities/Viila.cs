@@ -25,6 +25,8 @@ namespace Hotel.Domain.Entities
         public DateTime? UpdateDate { get; set; }
         [ValidateNever]
         public IEnumerable<Amenity> VillaAmenities { get; set; }
+
+        [NotMapped] public bool IsAvailable { get; set; } = true;
     }
 }
 
