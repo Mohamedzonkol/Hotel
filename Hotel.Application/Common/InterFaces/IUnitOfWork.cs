@@ -7,5 +7,6 @@
         IAmenityRepository AmenityRepository { get; }
         IBookingRepository BookingRepository { get; }
         IAppUserRepository AppUserRepository { get; }
+        Task SaveAsync();
     }
 }

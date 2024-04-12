@@ -26,5 +26,9 @@ namespace Hotel.Infrastructure.Repository
             BookingRepository = new BookingRepository(_context);
             AppUserRepository = new AppUserRepository(_context);
         }
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
