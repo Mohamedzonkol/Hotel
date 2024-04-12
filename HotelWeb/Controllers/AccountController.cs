@@ -95,6 +95,12 @@ namespace HotelWeb.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByEmailAsync(LoginVM.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Invalid login attempt");
+                    return View(LoginVM);
+                }
+
                 var result =
                     await signInManager.PasswordSignInAsync(user.Name, LoginVM.Password, LoginVM.RememberMe, false);
                 if (result.Succeeded)

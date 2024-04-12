@@ -14,7 +14,7 @@ namespace Hotel.Domain.Entities
         public string? Description { get; set; }
         [Display(Name = "Price Per Night"), Range(10, 100000)]
         public double Price { get; set; }
-        public int Sqft { get; set; }
+        public int Square { get; set; }
         [Range(1, 100)]
         public int Occupancy { get; set; }
         [NotMapped]

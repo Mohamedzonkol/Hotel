@@ -23,7 +23,7 @@ namespace Hotel.Infrastructure.Data
                     ImageUrl = "https://placehold.co/600x400",
                     Occupancy = 4,
                     Price = 200,
-                    Sqft = 550,
+                    Square = 550,
                 },
                 new Villa
                 {
@@ -33,7 +33,7 @@ namespace Hotel.Infrastructure.Data
                     ImageUrl = "https://placehold.co/600x401",
                     Occupancy = 4,
                     Price = 300,
-                    Sqft = 550,
+                    Square = 550,
                 },
                 new Villa
                 {
@@ -43,7 +43,7 @@ namespace Hotel.Infrastructure.Data
                     ImageUrl = "https://placehold.co/600x402",
                     Occupancy = 4,
                     Price = 400,
-                    Sqft = 750,
+                    Square = 750,
                 });
             modelBuilder.Entity<VillaNumber>().HasData(
                 new VillaNumber

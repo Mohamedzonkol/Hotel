@@ -1,4 +1,5 @@
 using Hotel.Application.Common.InterFaces;
+using Hotel.Application.Utility;
 using HotelWeb.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +21,16 @@ namespace HotelWeb.Controllers
         [HttpPost]
         public IActionResult GetVillasByDate(int nights, DateOnly checkInDate)
         {
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             var villaList = unit.VillaRepository.GetAllAsync(includeProperty: "VillaAmenities").ToList();
+            var villaNumberList = unit.VillaNumberRepository.GetAllAsync().ToList();
+            var bookedVillas = unit.BookingRepository.GetAllAsync(x => x.Status == SD.StatusApproved
+            || x.Status == SD.StatusCheckedIn).ToList();
             foreach (var villa in villaList)
             {
-                if (villa.Id % 2 == 0)
-                    villa.IsAvailable = false;
+                int roomAvailable =
+                    SD.VillaRoomsAvailable_Count(villa.Id, villaNumberList, checkInDate, nights, bookedVillas);
+                villa.IsAvailable = roomAvailable > 0 ? true : false;
             }
 
             HomeViewModel homeVM = new()

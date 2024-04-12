@@ -14,14 +14,18 @@ namespace Hotel.Infrastructure.Repository
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateStatusAsync(int bookingId, string bookingStatus)
+        public async Task UpdateStatusAsync(int bookingId, string bookingStatus, int villaNumber = 0)
         {
             var bookingFromDb = await context.Bookings.FirstOrDefaultAsync(x => x.Id == bookingId);
             if (bookingFromDb is not null)
             {
                 bookingFromDb.Status = bookingStatus;
                 if (bookingStatus == SD.StatusCheckedIn)
+                {
                     bookingFromDb.ActualCheckInDate = DateTime.Now;
+                    bookingFromDb.VillaNumber = villaNumber;
+                }
+
                 if (bookingStatus == SD.StatusCompleted)
                     bookingFromDb.ActualCheckOutDate = DateTime.Now;
             }

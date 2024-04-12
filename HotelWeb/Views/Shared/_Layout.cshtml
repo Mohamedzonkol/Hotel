@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
    <link rel="stylesheet" href="css/spinner.css"/>
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" />
     <style>
         .search-form {
             margin-left: auto; 
@@ -49,13 +50,16 @@
                                     <a class="dropdown-item" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Amenity" asp-action="Index">Amenity</a>
+                                    <a class  ="dropdown-item" asp-controller="Amenity" asp-action="Index">Amenity</a>
                                 </li>  
                                 <li>
-                                    <hr class="dropdown-divider">
+                                    <hr class ="dropdown-divider">
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" onclick="toggleDarkMode()">Dark Theme</a>
+                                    <a class  ="dropdown-item" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">Booking</a>
+                                </li> 
+                                <li>
+                                    <a class  ="dropdown-item" onclick="toggleDarkMode()">Dark Theme</a>
                                 </li>
 
                             </ul>
@@ -97,7 +101,8 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src ="//cdn.datatables.net/2.0.3/js/dataTables.min.js" asp-append-version="true"></script>
    @*  <script src="~/js/jquery.unobtrusive-ajax.min.js"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
