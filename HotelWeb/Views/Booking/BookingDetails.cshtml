@@ -47,13 +47,20 @@
         </div>
         <div class="col-12 col-lg-6 p-4 2 mt-4 mt-md-0" style="border-left: 1px solid #aaa">
             <form method="post">
+                <input asp-for="Id" hidden/>
+                <input asp-for="UserId" hidden/>
+                <input asp-for="VillaId" hidden/>
+                <input asp-for="CheckInDate" hidden/>
+                <input asp-for="VillaNumbers" hidden/>
+                <input asp-for="CheckOutDate" hidden/>
+                <input asp-for="Nights" hidden/>
                 <div class="row pt-1 mb-3 " style="border-radius: 20px;">
                     <div class="col-6">
                         <h3 class="text-success">Enter Booking Details</h3>
                     </div>
                     <div class="col-6">
                         @if ((Model.Status == SD.StatusApproved || Model.Status == SD.StatusPending)
-                        && User.IsInRole(SD.Role_Admin))
+                             && User.IsInRole(SD.Role_Admin))
                         {
                             <button type="submit" asp-controller="Booking" asp-action="CancelBooking" class="btn btn-sm btn-outline-danger form-control my-1">
                                 <i class="bi bi-x-circle"></i> &nbsp; Cancel Booking
@@ -64,67 +71,67 @@
                 <div class="row">
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning"></label>
-                        <input asp-for="Name" class="form-control" />
+                        <input asp-for="Name" class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning"></label>
-                        <input asp-for="Phone" class="form-control" />
+                        <input asp-for="Phone" class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning"></label>
-                        <input asp-for="Email" class="form-control" />
+                        <input asp-for="Email" class="form-control"/>
                     </div>
 
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">No. of nights</label>
-                        <input asp-for="Nights" disabled class="form-control" />
+                        <input asp-for="Nights" disabled class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Status</label>
-                        <input asp-for="Status" disabled class="form-control" />
+                        <input asp-for="Status" disabled class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Booking Date</label>
-                        <input asp-for="BookingDate" disabled class="form-control" />
+                        <input asp-for="BookingDate" disabled class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Check-in Date</label>
-                        <input asp-for="CheckInDate" disabled class="form-control" />
+                        <input asp-for="CheckInDate" disabled class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Actual Check-in Date</label>
-                        <input asp-for="ActualCheckInDate" disabled class="form-control" />
+                        <input asp-for="ActualCheckInDate" disabled class="form-control"/>
                     </div>
 
 
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Check-out Date</label>
-                        <input asp-for="CheckOutDate" disabled class="form-control" />
+                        <input asp-for="CheckOutDate" disabled class="form-control"/>
                     </div>
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Actual Check-out Date</label>
-                        <input asp-for="ActualCheckOutDate" disabled class="form-control" />
+                        <input asp-for="ActualCheckOutDate" disabled class="form-control"/>
                     </div>
                     @if (Model.Status == SD.StatusApproved && User.IsInRole(SD.Role_Admin))
                     {
                         <div class="form-group pt-2 col-6">
                             <label class="text-danger" asp-for="VillaNumber"></label>
-                          <select class="form-select" asp-for="VillaNumber">
+                            <select class="form-select" asp-for="VillaNumber">
                                 @foreach (var item in Model.VillaNumbers)
                                 {
                                     <option value="@item.Villa_Number">@item.Villa_Number</option>
                                 }
-                            </select> 
+                            </select>
                         </div>
                     }
                     else
                     {
-                        <input asp-for="VillaNumber" hidden />
+                        <input asp-for="VillaNumber" hidden/>
                         @if (Model.Status == SD.StatusCheckedIn || Model.Status == SD.StatusCompleted)
                         {
                             <div class="form-group pt-2 col-6">
                                 <label class="text-warning">Villa Number</label>
-                                <input asp-for="VillaNumber" disabled class="form-control" />
+                                <input asp-for="VillaNumber" disabled class="form-control"/>
                             </div>
                         }
                     }
@@ -133,20 +140,20 @@
                     {
                         <div class="form-group pt-2 col-6">
                             <label class="text-warning">Stripe PaymentIntent Id</label>
-                            <input asp-for="StripePaymentIntentId" disabled class="form-control" />
+                            <input asp-for="StripePaymentIntentId" disabled class="form-control"/>
                         </div>
                         <div class="form-group pt-2 col-6">
                             <label class="text-warning">Stripe Session Id</label>
-                            <input asp-for="StripeSessionId" disabled class="form-control" />
+                            <input asp-for="StripeSessionId" disabled class="form-control"/>
                         </div>
                         <div class="form-group pt-2 col-6">
                             <label class="text-warning">Payment Date</label>
-                            <input asp-for="PaymentDateTime" disabled class="form-control" />
+                            <input asp-for="PaymentDateTime" disabled class="form-control"/>
                         </div>
                     }
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning">Status</label>
-                        <input asp-for="Status" disabled class="form-control" />
+                        <input asp-for="Status" disabled class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group pt-2 pt-md-4">

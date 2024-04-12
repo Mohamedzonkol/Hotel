@@ -38,32 +38,40 @@
                         <li class="nav-item">
                             <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Content Management
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Villa" asp-action="Index">Villa</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
-                                </li>
-                                <li>
-                                    <a class  ="dropdown-item" asp-controller="Amenity" asp-action="Index">Amenity</a>
-                                </li>  
-                                <li>
-                                    <hr class ="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class  ="dropdown-item" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">Booking</a>
-                                </li> 
-                                <li>
-                                    <a class  ="dropdown-item" onclick="toggleDarkMode()">Dark Theme</a>
-                                </li>
+                        @if (User.IsInRole(SD.Role_Admin))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Content Management
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Villa" asp-action="Index">Villa</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Amenity" asp-action="Index">Amenity</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">Booking</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" onclick="toggleDarkMode()">Dark Theme</a>
+                                    </li>
 
-                            </ul>
-                        </li>  
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {   <li class="nav-item">
+                                <a class="nav-link text-secondary" asp-controller="Booking" asp-action="Index">Manage Booking</a>
+                            </li>
+                        }
                         <form class="d-flex search-form" role="search">
                             <input class="form-control me-3" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success Button" type="submit">Search</button>

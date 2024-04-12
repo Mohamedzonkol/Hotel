@@ -11,12 +11,11 @@ namespace HotelWeb.Controllers
     [Authorize]
     public class BookingController(IUnitOfWork unit) : Controller
     {
-        [Authorize]
+
         public IActionResult Index()
         {
             return View();
         }
-        [Authorize]
         public async Task<IActionResult> FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity!;
@@ -37,7 +36,6 @@ namespace HotelWeb.Controllers
             booking.TotalCost = booking.Villa.Price * nights;
             return View(booking);
         }
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> FinalizeBooking(Booking booking)
         {
@@ -45,6 +43,23 @@ namespace HotelWeb.Controllers
             booking.TotalCost = villa.Price * booking.Nights;
             booking.Status = SD.StatusPending;
             booking.BookingDate = DateTime.Now;
+            var villaNumberList = unit.VillaNumberRepository.GetAllAsync().ToList();
+            var bookedVillas = unit.BookingRepository.GetAllAsync(x => x.Status == SD.StatusApproved
+                                                                       || x.Status == SD.StatusCheckedIn).ToList();
+            int roomAvailable =
+                    SD.VillaRoomsAvailable_Count(villa.Id, villaNumberList, (DateOnly)booking.CheckInDate!, booking.Nights, bookedVillas);
+            if (roomAvailable == 0)
+            {
+                TempData["error"] = "Room Has Been Sold Out .";
+                return RedirectToAction("FinalizeBooking", new
+                {
+                    villaId = booking.VillaId,
+                    checkInDate = booking.CheckInDate,
+                    nights = booking.Nights
+                });
+
+            }
+
             await unit.BookingRepository.AddAsync(booking);
             var domain = Request.Scheme + "://" + Request.Host.Value + "/";
             var options = new SessionCreateOptions
@@ -76,7 +91,6 @@ namespace HotelWeb.Controllers
             return new StatusCodeResult(303);
             //return RedirectToAction("BookingConfirmation", new { bookingId = booking.Id });
         }
-        [Authorize]
         public async Task<IActionResult> BookingConfirmation(int bookingId)
         {
             Booking bookingFromDb = await unit.BookingRepository.GetAsync(x => x.Id == bookingId
@@ -93,7 +107,6 @@ namespace HotelWeb.Controllers
             }
             return View(bookingId);
         }
-
         public async Task<IActionResult> BookingDetails(int bookingId)
         {
             Booking bookingFromDb = await unit.BookingRepository.GetAsync(x => x.Id == bookingId
@@ -108,6 +121,30 @@ namespace HotelWeb.Controllers
             return View(bookingFromDb);
         }
 
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> CheckIn(Booking booking)
+        {
+            await unit.BookingRepository.UpdateStatusAsync(booking.Id, SD.StatusCheckedIn, booking.VillaNumber);
+            TempData["Success"] = "Booking Updated Successfully .";
+            return RedirectToAction("BookingDetails", new { bookingId = booking.Id });
+        }
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> CheckOut(Booking booking)
+        {
+            await unit.BookingRepository.UpdateStatusAsync(booking.Id, SD.StatusCompleted, booking.VillaNumber);
+            TempData["Success"] = "Booking Completed Successfully .";
+            return RedirectToAction("BookingDetails", new { bookingId = booking.Id });
+        }
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> CancelBooking(Booking booking)
+        {
+            await unit.BookingRepository.UpdateStatusAsync(booking.Id, SD.StatusCancelled, 0);
+            TempData["Success"] = "Booking Cancelled Successfully .";
+            return RedirectToAction("BookingDetails", new { bookingId = booking.Id });
+        }
         private List<int> AssignAvailableVillaNumberByVilla(int villaId)
         {
             List<int> availableVillaNumber = new();
@@ -122,7 +159,6 @@ namespace HotelWeb.Controllers
 
             return availableVillaNumber;
         }
-
         #region ApiCall
         [HttpGet]
         [Authorize]
