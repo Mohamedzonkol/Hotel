@@ -2,7 +2,6 @@
 .loading {
     position: fixed;
     z-index: 999;
-    overflow: show;
     margin: auto;
     top: 0;
     left: 0;

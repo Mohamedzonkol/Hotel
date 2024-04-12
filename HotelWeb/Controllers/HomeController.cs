@@ -12,19 +12,11 @@ namespace HotelWeb.Controllers
             {
                 VillaList = unit.VillaRepository.GetAllAsync(includeProperty: "VillaAmenities"),
                 Nights = 1,
-                CheckInData = DateOnly.FromDateTime(DateTime.Now)
+                CheckInDate = DateOnly.FromDateTime(DateTime.Now)
             };
 
             return View(vm);
         }
-
-        [HttpPost]
-        public ActionResult Index(HomeViewModel vm)
-        {
-            vm.VillaList = unit.VillaRepository.GetAllAsync(includeProperty: "VillaAmenities");
-            return View(vm);
-        }
-
         [HttpPost]
         public IActionResult GetVillasByDate(int nights, DateOnly checkInDate)
         {
@@ -38,7 +30,7 @@ namespace HotelWeb.Controllers
 
             HomeViewModel homeVM = new()
             {
-                CheckInData = checkInDate,
+                CheckInDate = checkInDate,
                 VillaList = villaList,
                 Nights = nights
             };
