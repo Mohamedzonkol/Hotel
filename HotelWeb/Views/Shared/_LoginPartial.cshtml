@@ -10,7 +10,10 @@
             <a class="nav-link" href="#">Hello @UserManager.GetUserName(User)</a>
         </li>
         <li class="nav-item">
-            <a asp-controller="Account" asp-action="Logout" class="nav-link">Logout</a>
+            <a asp-controller="Account" asp-action="Logout" class="nav-link">
+                <span class="me-2"><i class="bi bi-box-arrow-in-right"></i></span>
+                <span>Logout</span>
+            </a>
         </li>
     }
     else

@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WhiteLagoon.Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/apexcharts.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="css/spinner.css"/>
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/resort.png" style="width: 35px" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-house"></i></span>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="me-2"><i class="bi bi-menu-down"></i></span>
+                                <span> Content Management</span>
+                                   
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                    <a class="dropdown-item nav-link" asp-controller="Villa" asp-action="Index">
+                                        <span class="me-2"><i class="bi bi-house-door"></i></span>
+                                        <span>Villa</span>
+                                    </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-item nav-link" asp-controller="VillaNumber" asp-action="Index">
+                                            <span class="me-2"><i class="bi bi-list-ol"></i></span>
+                                            <span>VillaNumber</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item nav-link" asp-controller="Amenity" asp-action="Index">
+                                            <span class="me-2"><i class="bi bi-building"></i></span>
+                                            <span>Amenity</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-item nav-link" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">
+                                            <span class="me-2"><i class="bi bi-journal-plus"></i></span>
+                                            <span>Booking</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+<div class="">
+    <main role="main" >
+        <partial name="_Notifcation"/>
+        <div class="loading spinner" style="display:none;"></div>
+        @RenderBody()
+    </main>
+</div>
+
+
+<footer class="border-top footer">
+    <div class="container text-center">
+        Made With <i class="bi bi-heart-fill"></i> By Mohamed Zonkol
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="//cdn.datatables.net/2.0.3/js/dataTables.min.js" asp-append-version="true"></script>
+<script src="~/js/apexcharts.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

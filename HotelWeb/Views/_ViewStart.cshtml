@@ -1,3 +1,4 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Hotel.Application.Utility
+@{
+    Layout = User.IsInRole(SD.Role_Admin) ? "_LayoutAdmin" : "_Layout";
 }

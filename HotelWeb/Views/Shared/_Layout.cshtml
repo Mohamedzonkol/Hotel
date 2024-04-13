@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
-   <link rel="stylesheet" href="css/spinner.css"/>
+    <link rel="stylesheet" href="css/spinner.css"/>
     <link rel="stylesheet" href="//cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" />
     <style>
         .search-form {
@@ -21,12 +21,11 @@
         .Button {
             width: 250px;
         }
-     
     </style>
     </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
+<header>
+     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/resort.png" style="width: 35px"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -36,42 +35,23 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-house"></i></span>
+                                <span>Home</span>
+                            </a>
                         </li>
-                        @if (User.IsInRole(SD.Role_Admin))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Content Management
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Villa" asp-action="Index">Villa</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Amenity" asp-action="Index">Amenity</a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">Booking</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" onclick="toggleDarkMode()">Dark Theme</a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                        }
-                        else
-                        {   <li class="nav-item">
-                                <a class="nav-link text-secondary" asp-controller="Booking" asp-action="Index">Manage Booking</a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">
+                                <span class="me-2"><i class="bi bi-journal-plus"></i></span>
+                                <span>Booking</span>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <button class="nav-link" onclick="toggleDarkMode()">
+                                <span class="me-2"><i class="bi bi-moon-fill"></i></span>
+                                <span>Dark Theme</span>
+                            </button>
+                        </li>
                         <form class="d-flex search-form" role="search">
                             <input class="form-control me-3" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success Button" type="submit">Search</button>
@@ -80,8 +60,8 @@
                     <partial name="_LoginPartial" />
                 </div>
             </div>
-        </nav>
-    </header>
+        </nav> 
+</header>
     <div class="">
         <main role="main" >
             <partial name="_Notifcation"/>
@@ -107,11 +87,11 @@
         }
     </script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src ="//cdn.datatables.net/2.0.3/js/dataTables.min.js" asp-append-version="true"></script>
-   @*  <script src="~/js/jquery.unobtrusive-ajax.min.js"></script> *@
-    @await RenderSectionAsync("Scripts", required: false)
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src ="//cdn.datatables.net/2.0.3/js/dataTables.min.js" asp-append-version="true"></script>
+@*  <script src="~/js/jquery.unobtrusive-ajax.min.js"></script> *@
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

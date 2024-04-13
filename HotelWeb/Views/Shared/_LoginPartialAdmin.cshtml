@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a class="nav-link" href="#">Hello @UserManager.GetUserName(User)</a>
+    </li>
+    <li class="nav-item">
+        <a asp-controller="Account" asp-action="Logout" class="nav-link">Logout</a>
+    </li>
+}
+</ul>

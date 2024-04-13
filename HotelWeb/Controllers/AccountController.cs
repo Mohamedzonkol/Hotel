@@ -105,10 +105,17 @@ namespace HotelWeb.Controllers
                     await signInManager.PasswordSignInAsync(user.Name, LoginVM.Password, LoginVM.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    if (string.IsNullOrEmpty(LoginVM.ReturnUrl))
-                        return RedirectToAction("Index", "Home");
+                    if (await userManager.IsInRoleAsync(user, SD.Role_Admin))
+                    {
+                        return RedirectToAction("Index", "Dashboard");
+                    }
                     else
-                        return LocalRedirect(LoginVM.ReturnUrl);
+                    {
+                        if (string.IsNullOrEmpty(LoginVM.ReturnUrl))
+                            return RedirectToAction("Index", "Home");
+                        else
+                            return LocalRedirect(LoginVM.ReturnUrl);
+                    }
                 }
                 else
                 {
