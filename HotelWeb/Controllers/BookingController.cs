@@ -4,12 +4,17 @@ using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
+using Syncfusion.DocIORenderer;
+using Syncfusion.Drawing;
+using Syncfusion.Pdf;
 using System.Security.Claims;
 
 namespace HotelWeb.Controllers
 {
     [Authorize]
-    public class BookingController(IUnitOfWork unit) : Controller
+    public class BookingController(IUnitOfWork unit, IWebHostEnvironment webHost) : Controller
     {
 
         public IActionResult Index()
@@ -145,6 +150,124 @@ namespace HotelWeb.Controllers
             TempData["Success"] = "Booking Cancelled Successfully .";
             return RedirectToAction("BookingDetails", new { bookingId = booking.Id });
         }
+        [HttpPost]
+        public async Task<IActionResult> GenerateInvoice(int id, string downloadType)
+        {
+            string basePath = webHost.WebRootPath;//wwwroot
+            WordDocument wordDocument = new();
+            //Load Template
+            string dataPath = basePath + @"/exports/BookingDetails.docx";
+            await using FileStream fileStream = new(dataPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            wordDocument.Open(fileStream, FormatType.Automatic);
+            //Update  Template
+            Booking bookingFromDb = await unit.BookingRepository.GetAsync(x => x.Id == id, includeProperty: "User,Villa");
+
+            TextSelection textSelection = wordDocument.Find("xx_customer_name", false, true);
+            WTextRange textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.Name;
+            textSelection = wordDocument.Find("xx_customer_phone", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.Phone;
+            textSelection = wordDocument.Find("xx_customer_email", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.Email;
+
+            textSelection = wordDocument.Find("XX_BOOKING_NUMBER", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = "BOOKING ID - " + bookingFromDb.Id;
+            textSelection = wordDocument.Find("XX_BOOKING_DATE", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = "BOOKING DATE - " + bookingFromDb.BookingDate.ToShortDateString();
+
+            textSelection = wordDocument.Find("xx_payment_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.PaymentDateTime.ToShortDateString();
+            textSelection = wordDocument.Find("xx_checkin_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.CheckInDate.ToShortDateString();
+            textSelection = wordDocument.Find("xx_checkout_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.CheckOutDate.ToShortDateString(); ;
+            textSelection = wordDocument.Find("xx_booking_total", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFromDb.TotalCost.ToString("c");
+
+            WTable table = new(wordDocument);
+            table.TableFormat.Borders.LineWidth = 1f;
+            table.TableFormat.Borders.Color = Color.Black;
+            table.TableFormat.Paddings.Top = 7f;
+            table.TableFormat.Paddings.Bottom = 7f;
+            table.TableFormat.Borders.Horizontal.LineWidth = 1f;
+
+            int rows = bookingFromDb.VillaNumber > 0 ? 3 : 2;
+            table.ResetCells(rows, 4);
+
+            WTableRow row0 = table.Rows[0];
+
+            row0.Cells[0].AddParagraph().AppendText("NIGHTS");
+            row0.Cells[0].Width = 80;
+            row0.Cells[1].AddParagraph().AppendText("VILLA");
+            row0.Cells[1].Width = 220;
+            row0.Cells[2].AddParagraph().AppendText("PRICE PER NIGHT");
+            row0.Cells[3].AddParagraph().AppendText("TOTAL");
+            row0.Cells[3].Width = 80;
+            WTableRow row1 = table.Rows[1];
+
+            row1.Cells[0].AddParagraph().AppendText(bookingFromDb.Nights.ToString());
+            row1.Cells[0].Width = 80;
+            row1.Cells[1].AddParagraph().AppendText(bookingFromDb.Villa.Name);
+            row1.Cells[1].Width = 220;
+            row1.Cells[2].AddParagraph().AppendText((bookingFromDb.TotalCost / bookingFromDb.Nights).ToString("c"));
+            row1.Cells[3].AddParagraph().AppendText(bookingFromDb.TotalCost.ToString("c"));
+            row1.Cells[3].Width = 80;
+            if (bookingFromDb.VillaNumber > 0)
+            {
+                WTableRow row2 = table.Rows[2];
+
+                row2.Cells[0].Width = 80;
+                row2.Cells[1].AddParagraph().AppendText("Villa Number - " + bookingFromDb.VillaNumber.ToString());
+                row2.Cells[1].Width = 220;
+                row2.Cells[3].Width = 80;
+            }
+
+            WTableStyle tableStyle = wordDocument.AddTableStyle("CustomStyle") as WTableStyle;
+            tableStyle.TableProperties.RowStripe = 1;
+            tableStyle.TableProperties.ColumnStripe = 2;
+            tableStyle.TableProperties.Paddings.Top = 2;
+            tableStyle.TableProperties.Paddings.Bottom = 1;
+            tableStyle.TableProperties.Paddings.Left = 5.4f;
+            tableStyle.TableProperties.Paddings.Right = 5.4f;
+
+            ConditionalFormattingStyle firstRowStyle = tableStyle.ConditionalFormattingStyles.Add(ConditionalFormattingType.FirstRow);
+            firstRowStyle.CharacterFormat.Bold = true;
+            firstRowStyle.CharacterFormat.TextColor = Color.FromArgb(255, 255, 255, 255);
+            firstRowStyle.CellProperties.BackColor = Color.Black;
+            table.ApplyStyle("CustomStyle");
+            TextBodyPart bodyPart = new(wordDocument);
+            bodyPart.BodyItems.Add(table);
+            wordDocument.Replace("<ADDTABLEHERE>", bodyPart, false, false);
+            using DocIORenderer renderer = new();
+            MemoryStream stream = new();
+            if (downloadType == "word")
+            {
+                wordDocument.Save(stream, FormatType.Docx);
+                stream.Position = 0;
+
+                return File(stream, "application/docx", "BookingDetails.docx");
+            }
+            else
+            {
+                PdfDocument pdfDocument = renderer.ConvertToPDF(wordDocument);
+                pdfDocument.Save(stream);
+                stream.Position = 0;
+                return File(stream, "application/pdf", "BookingDetails.pdf");
+            }
+
+        }
+
+
+
+
         private List<int> AssignAvailableVillaNumberByVilla(int villaId)
         {
             List<int> availableVillaNumber = new();
@@ -159,6 +282,7 @@ namespace HotelWeb.Controllers
 
             return availableVillaNumber;
         }
+
         #region ApiCall
         [HttpGet]
         [Authorize]
