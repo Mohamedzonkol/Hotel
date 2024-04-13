@@ -16,9 +16,15 @@ namespace Hotel.Infrastructure.Repository
             dbSet = _context.Set<T>();
         }
 
-        public IEnumerable<T> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperty = null)
+        public IEnumerable<T> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperty = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            if (tracked)
+                query = dbSet;
+            else
+                query = dbSet.AsNoTracking();
+
+
             if (filter is not null)
                 query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperty))
@@ -32,9 +38,13 @@ namespace Hotel.Infrastructure.Repository
             return query.ToList();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter, string? includeProperty = null)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter, string? includeProperty = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            if (tracked)
+                query = dbSet;
+            else
+                query = dbSet.AsNoTracking();
             if (filter is not null)
                 query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperty))
