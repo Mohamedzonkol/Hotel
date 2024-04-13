@@ -7,7 +7,7 @@ function loadTotalBookingRadialChart() {
     $(".chart-spinner").show();
 
     $.ajax({
-        url: "/Dashboard/GetTotalBookingRadialChartData",
+        url: "/Dashboard/GetTotalBookingRedialChartData",
         type: 'GET',
         dataType: 'json',
         success: function (data) {

@@ -23,6 +23,7 @@ function loadLineChart(id, data) {
     var chartColors = getChartColorsArray(id);
     var options = {
         colors: chartColors,
+        
         chart: {
             height: 350,
             //show area later
@@ -49,7 +50,7 @@ function loadLineChart(id, data) {
             }
         },
         xaxis: {
-            categories: data.categories,
+            categories: data.categorie,
             labels: {
                 style: {
                     colors: "#fff",

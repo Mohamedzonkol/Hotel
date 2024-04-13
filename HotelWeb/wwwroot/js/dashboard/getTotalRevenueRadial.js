@@ -22,12 +22,9 @@ function loadRevenueRadialChart() {
                 sectionCurrentCount.className = "text-danger me-1";
                 sectionCurrentCount.innerHTML = '<i class="bi bi-arrow-down-right-circle me-1"></i> <span> ' + data.countInCurrentMonth + '</span>';
             }
-
             document.querySelector("#sectionRevenueCount").append(sectionCurrentCount);
             document.querySelector("#sectionRevenueCount").append("since last month");
-
             loadRadialBarChart("totalRevenueRadialChart", data);
-
             $(".chart-spinner").hide();
         }
     });

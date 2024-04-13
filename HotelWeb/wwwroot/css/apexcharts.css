@@ -401,13 +401,13 @@
   cursor: move
 }
 
-.apexcharts-menu-icon,.apexcharts-pan-icon,.apexcharts-reset-icon,.apexcharts-selection-icon,.apexcharts-toolbar-custom-icon,.apexcharts-zoom-icon,.apexcharts-zoomin-icon,.apexcharts-zoomout-icon {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  line-height: 24px;
-  color: #6e8192;
-  text-align: center
+.apexcharts-menu-icon, .apexcharts-pan-icon, .apexcharts-reset-icon, .apexcharts-selection-icon, .apexcharts-toolbar-custom-icon, .apexcharts-zoom-icon, .apexcharts-zoomin-icon, .apexcharts-zoomout-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    line-height: 24px;
+    color: #bfbfbf;
+    text-align: center
 }
 
 .apexcharts-menu-icon svg,.apexcharts-reset-icon svg,.apexcharts-zoom-icon svg,.apexcharts-zoomin-icon svg,.apexcharts-zoomout-icon svg {

@@ -25,11 +25,11 @@ namespace Hotel.Domain.Entities
         public int Nights { get; set; }
         public string? Status { get; set; }
         [Required]
-        public DateTime? BookingDate { get; set; }
+        public DateTime BookingDate { get; set; }
         [Required]
-        public DateOnly? CheckInDate { get; set; }
+        public DateOnly CheckInDate { get; set; }
         [Required]
-        public DateOnly? CheckOutDate { get; set; }
+        public DateOnly CheckOutDate { get; set; }
         public bool IsPaymentSuccessfully { get; set; } = false;
         public DateTime PaymentDateTime { get; set; }
         public string? StripeSessionId { get; set; }
@@ -37,7 +37,6 @@ namespace Hotel.Domain.Entities
         public DateTime ActualCheckInDate { get; set; }
         public DateTime ActualCheckOutDate { get; set; }
         public int VillaNumber { get; set; }
-
         [NotMapped]
         public List<VillaNumber> VillaNumbers { get; set; }
 
