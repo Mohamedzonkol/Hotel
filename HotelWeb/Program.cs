@@ -1,3 +1,5 @@
+using Hotel.Application;
+using Hotel.Application.Common.Intilizer;
 using Hotel.Domain.Entities;
 using Hotel.Infrastructure;
 using Hotel.Infrastructure.Data;
@@ -14,7 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();//.AddDefaultTokenProviders();
 #region Depenancy Injection
-builder.Services.AddInfrastructreDependencies();
+builder.Services.AddInfrastructreDependencies().AddServicesDependencies();
 #endregion
 
 
@@ -31,11 +33,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
-//app.UseAuthentication();
+SeedDatabase();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+void SeedDatabase()
+{
+    using var scope = app.Services.CreateScope();
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    dbInitializer.Initialize();
+}

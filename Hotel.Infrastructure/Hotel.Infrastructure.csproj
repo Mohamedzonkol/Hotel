@@ -18,6 +18,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="runtime.any.System.IO" Version="4.3.0" />
+    <PackageReference Include="runtime.any.System.Runtime" Version="4.3.1" />
+    <PackageReference Include="runtime.any.System.Text.Encoding" Version="4.3.0" />
+    <PackageReference Include="runtime.any.System.Text.Encoding.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

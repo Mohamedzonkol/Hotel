@@ -1,6 +1,6 @@
-﻿namespace HotelWeb.ViewModel
+﻿namespace Hotel.Application.Common.DTO
 {
-    public class LineChartViewModel
+    public class LineChartDTO
     {
         public List<ChartData> Series { get; set; }
         public string[] Categorie { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace HotelWeb.ViewModel
+﻿namespace Hotel.Application.Common.DTO
 {
-    public class RedialBarChartViewModel
+    public class RedialBarChartDto
     {
         public decimal TotalCount { get; set; }
         public decimal CountInCurrentMonth { get; set; }

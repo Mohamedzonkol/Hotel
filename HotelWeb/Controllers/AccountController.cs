@@ -26,12 +26,6 @@ namespace HotelWeb.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            if (!roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
-            {
-                roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
-                roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).Wait();
-            }
-
             RegisterViewModel vm = new()
             {
                 RoleList = roleManager.Roles.Select(x => new SelectListItem

@@ -12,6 +12,16 @@
     <link rel="stylesheet" href="~/HotelWeb.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="css/spinner.css"/>
     <link rel="stylesheet" href="//cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" />
+    <style>
+        .search-form {
+            margin-left: auto; 
+            max-height: 40px;
+            width: 500px;
+        }
+        .Button {
+            width: 250px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -36,42 +46,48 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="me-2"><i class="bi bi-menu-down"></i></span>
                                 <span> Content Management</span>
                                    
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
                                     <a class="dropdown-item nav-link" asp-controller="Villa" asp-action="Index">
                                         <span class="me-2"><i class="bi bi-house-door"></i></span>
                                         <span>Villa</span>
                                     </a>
-                                    </li>
-                                    <li>
+                                </li>
+                                <li>
                                     <a class="dropdown-item nav-link" asp-controller="VillaNumber" asp-action="Index">
-                                            <span class="me-2"><i class="bi bi-list-ol"></i></span>
-                                            <span>VillaNumber</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item nav-link" asp-controller="Amenity" asp-action="Index">
-                                            <span class="me-2"><i class="bi bi-building"></i></span>
-                                            <span>Amenity</span>
-                                        </a>
-                                    </li>
-                                    <li>
+                                        <span class="me-2"><i class="bi bi-list-ol"></i></span>
+                                        <span>VillaNumber</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link" asp-controller="Amenity" asp-action="Index">
+                                        <span class="me-2"><i class="bi bi-building"></i></span>
+                                        <span>Amenity</span>
+                                    </a>
+                                </li>
+                                <li>
                                     <a class="dropdown-item nav-link" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">
-                                            <span class="me-2"><i class="bi bi-journal-plus"></i></span>
-                                            <span>Booking</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                        <span class="me-2"><i class="bi bi-journal-plus"></i></span>
+                                        <span>Booking</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" onclick="toggleDarkMode()">
+                                <span class="me-2"><i class="bi bi-moon-fill"></i></span>
+                                <span>Dark Theme</span>
+                            </button>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -92,6 +108,16 @@
         Made With <i class="bi bi-heart-fill"></i> By Mohamed Zonkol
     </div>
 </footer>
+    <script>
+
+        function toggleDarkMode() {
+            const htmlElement = document.querySelector('html');
+            const currentTheme = htmlElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlElement.setAttribute('data-bs-theme', newTheme);
+
+        }
+    </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

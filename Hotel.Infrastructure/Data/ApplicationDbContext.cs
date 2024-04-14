@@ -44,6 +44,15 @@ namespace Hotel.Infrastructure.Data
                     Occupancy = 4,
                     Price = 400,
                     Square = 750,
+                }, new Villa
+                {
+                    Id = 4,
+                    Name = "Aveno",
+                    Description = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+                    ImageUrl = "https://placehold.co/600x402",
+                    Occupancy = 5,
+                    Price = 100,
+                    Square = 800,
                 });
             modelBuilder.Entity<VillaNumber>().HasData(
                 new VillaNumber

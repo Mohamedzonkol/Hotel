@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="runtime.any.System.IO" Version="4.3.0" />
+    <PackageReference Include="runtime.any.System.Runtime" Version="4.3.1" />
+    <PackageReference Include="runtime.any.System.Text.Encoding" Version="4.3.0" />
+    <PackageReference Include="runtime.any.System.Text.Encoding.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Hotel.Domain\Hotel.Domain.csproj" />
   </ItemGroup>
 
