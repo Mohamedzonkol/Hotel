@@ -62,7 +62,7 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
-        // [Authorize(Roles = SD.Role_Owner)]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Update(AmenityViewModel obj)
         {
             if (ModelState.IsValid)
@@ -96,7 +96,7 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
-        //  [Authorize(Roles = SD.Role_Owner)]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Delete(AmenityViewModel obj)
         {
             var amenity = await amenityServices.GetAmenityById(obj.Amenity.Id);

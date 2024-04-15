@@ -1,4 +1,5 @@
 ﻿using Hotel.Application.Services.Interfaces;
+using Hotel.Application.Utility;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,7 @@ namespace HotelWeb.Controllers
             return View(villa);
         }
         [HttpPost]
-        // [Authorize(Roles = SD.Role_Owner)]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Update(Villa villa)
         {
             if (ModelState.IsValid && villa.Id > 0)
@@ -59,7 +60,7 @@ namespace HotelWeb.Controllers
             return View(villa);
         }
         [HttpPost]
-        // [Authorize(Roles = SD.Role_Owner)]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Delete(Villa villa)
         {
             bool isDeleted = await villaServices.Delete(villa.Id);
