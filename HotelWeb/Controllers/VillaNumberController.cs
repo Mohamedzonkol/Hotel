@@ -1,5 +1,7 @@
 ﻿using Hotel.Application.Common.InterFaces;
+using Hotel.Application.Utility;
 using HotelWeb.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -71,6 +73,7 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Update(VillaNumberViewModel obj)
         {
             if (ModelState.IsValid)
@@ -104,6 +107,7 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Delete(VillaNumberViewModel obj)
         {
             var villaNumber = await unit.VillaNumberRepository.GetAsync(x => x.Villa_Number == obj.VillaNumber.Villa_Number);

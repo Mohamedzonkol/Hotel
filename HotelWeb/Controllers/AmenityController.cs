@@ -45,6 +45,7 @@ namespace HotelWeb.Controllers
             TempData["Error"] = "The Amenity Can Not Be Created .";
             return View(obj);
         }
+
         public async Task<IActionResult> Update(int amentityId)
         {
             AmenityViewModel vm = new AmenityViewModel
@@ -61,6 +62,7 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Update(AmenityViewModel obj)
         {
             if (ModelState.IsValid)
@@ -77,6 +79,7 @@ namespace HotelWeb.Controllers
             TempData["Error"] = "The Amenity Can Not Be Updated .";
             return View(obj);
         }
+
         public async Task<IActionResult> Delete(int amentityId)
         {
             AmenityViewModel vm = new AmenityViewModel
@@ -93,6 +96,7 @@ namespace HotelWeb.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Delete(AmenityViewModel obj)
         {
             var amenity = await unit.AmenityRepository.GetAsync(x => x.Id == obj.Amenity.Id);

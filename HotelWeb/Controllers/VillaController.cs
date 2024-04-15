@@ -1,4 +1,5 @@
 ﻿using Hotel.Application.Common.InterFaces;
+using Hotel.Application.Utility;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,7 @@ namespace HotelWeb.Controllers
             return View(villa);
         }
         [HttpPost]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Update(Villa villa)
         {
             if (ModelState.IsValid && villa.Id > 0)
@@ -88,6 +90,7 @@ namespace HotelWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Delete(Villa villa)
         {
             var villaObj = await unit.VillaRepository.GetAsync(x => x.Id == villa.Id);
