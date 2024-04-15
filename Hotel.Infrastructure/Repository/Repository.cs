@@ -32,7 +32,7 @@ namespace Hotel.Infrastructure.Repository
                 //Be Careful The include property case sensitive
                 foreach (var item in includeProperty.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(item);
+                    query = query.Include(item.Trim());
                 }
             }
             return query.ToList();
@@ -51,7 +51,7 @@ namespace Hotel.Infrastructure.Repository
             {
                 foreach (var item in includeProperty.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(item);
+                    query = query.Include(item.Trim());
                 }
             }
             return await query.FirstOrDefaultAsync();

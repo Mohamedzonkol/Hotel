@@ -1,18 +1,17 @@
-using Hotel.Application.Common.InterFaces;
-using Hotel.Application.Utility;
+using Hotel.Application.Services.Interfaces;
 using HotelWeb.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.Presentation;
 
 namespace HotelWeb.Controllers
 {
-    public class HomeController(IUnitOfWork unit, IWebHostEnvironment webHost) : Controller
+    public class HomeController(IVillaServices villaServices, IWebHostEnvironment webHost) : Controller
     {
         public ActionResult Index()
         {
             HomeViewModel vm = new()
             {
-                VillaList = unit.VillaRepository.GetAllAsync(includeProperty: "VillaAmenities"),
+                VillaList = villaServices.GetAllVilla(includeProp: "VillaAmenities"),
                 Nights = 1,
                 CheckInDate = DateOnly.FromDateTime(DateTime.Now)
             };
@@ -23,17 +22,7 @@ namespace HotelWeb.Controllers
         public IActionResult GetVillasByDate(int nights, DateOnly checkInDate)
         {
             Thread.Sleep(500);
-            var villaList = unit.VillaRepository.GetAllAsync(includeProperty: "VillaAmenities").ToList();
-            var villaNumberList = unit.VillaNumberRepository.GetAllAsync().ToList();
-            var bookedVillas = unit.BookingRepository.GetAllAsync(x => x.Status == SD.StatusApproved
-            || x.Status == SD.StatusCheckedIn).ToList();
-            foreach (var villa in villaList)
-            {
-                int roomAvailable =
-                    SD.VillaRoomsAvailable_Count(villa.Id, villaNumberList, checkInDate, nights, bookedVillas);
-                villa.IsAvailable = roomAvailable > 0 ? true : false;
-            }
-
+            var villaList = villaServices.GetVillasByDate(nights, checkInDate);
             HomeViewModel homeVM = new()
             {
                 CheckInDate = checkInDate,
@@ -46,7 +35,7 @@ namespace HotelWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> GeneratePPTExport(int id)
         {
-            var villa = await unit.VillaRepository.GetAsync(x => x.Id == id, includeProperty: "VillaAmenities");
+            var villa = await villaServices.GetVillaById(id, includeProp: "VillaAmenities");
             if (villa is null)
             {
                 return RedirectToAction(nameof(Error));

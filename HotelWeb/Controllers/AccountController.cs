@@ -1,5 +1,4 @@
-﻿using Hotel.Application.Common.InterFaces;
-using Hotel.Application.Utility;
+﻿using Hotel.Application.Utility;
 using Hotel.Domain.Entities;
 using HotelWeb.ViewModel;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelWeb.Controllers
 {
-    public class AccountController(IUnitOfWork unit, UserManager<ApplicationUser> userManager,
+    public class AccountController(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
         : Controller
     {

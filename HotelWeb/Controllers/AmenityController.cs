@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Common.InterFaces;
+﻿using Hotel.Application.Services.Interfaces;
 using Hotel.Application.Utility;
 using HotelWeb.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -8,19 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace HotelWeb.Controllers
 {
     [Authorize(Roles = SD.Role_Admin)]
-    public class AmenityController(IUnitOfWork unit) : Controller
+    public class AmenityController(IAmenityServices amenityServices, IVillaServices villaServices) : Controller
     {
         public Task<IActionResult> Index()
         {
             var amenities =
-                unit.AmenityRepository.GetAllAsync(includeProperty: "Villa");
+                amenityServices.GetAllAmenity("Villa");
             return Task.FromResult<IActionResult>(View(amenities));
         }
         public async Task<IActionResult> Create()
         {
             AmenityViewModel vm = new AmenityViewModel
             {
-                VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
+                VillaList = villaServices.GetAllVilla().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -33,11 +33,11 @@ namespace HotelWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await unit.AmenityRepository.AddAsync(obj.Amenity);
+                await amenityServices.CreateAsync(obj.Amenity);
                 TempData["Success"] = "The Amenity Has Been Created Successfully .";
                 return RedirectToAction("Index", "Amenity");
             }
-            obj.VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
+            obj.VillaList = villaServices.GetAllVilla().Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
@@ -50,28 +50,28 @@ namespace HotelWeb.Controllers
         {
             AmenityViewModel vm = new AmenityViewModel
             {
-                VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
+                VillaList = villaServices.GetAllVilla().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                Amenity = await unit.AmenityRepository.GetAsync(x => x.Id == amentityId)
+                Amenity = await amenityServices.GetAmenityById(amentityId)
             };
             if (vm.Amenity == null)
                 return RedirectToAction("Error", "Home");
             return View(vm);
         }
         [HttpPost]
-        [Authorize(Roles = SD.Role_Owner)]
+        // [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Update(AmenityViewModel obj)
         {
             if (ModelState.IsValid)
             {
-                await unit.AmenityRepository.UpdateAsync(obj.Amenity);
+                await amenityServices.UpdateAsync(obj.Amenity);
                 TempData["Success"] = "The Amenity Has Been Updated Successfully .";
                 return RedirectToAction("Index", "Amenity");
             }
-            obj.VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
+            obj.VillaList = villaServices.GetAllVilla().Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
@@ -84,25 +84,25 @@ namespace HotelWeb.Controllers
         {
             AmenityViewModel vm = new AmenityViewModel
             {
-                VillaList = unit.VillaRepository.GetAllAsync().Select(x => new SelectListItem
+                VillaList = villaServices.GetAllVilla().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                Amenity = await unit.AmenityRepository.GetAsync(x => x.Id == amentityId)
+                Amenity = await amenityServices.GetAmenityById(amentityId)
             };
             if (vm.Amenity == null)
                 return RedirectToAction("Error", "Home");
             return View(vm);
         }
         [HttpPost]
-        [Authorize(Roles = SD.Role_Owner)]
+        //  [Authorize(Roles = SD.Role_Owner)]
         public async Task<IActionResult> Delete(AmenityViewModel obj)
         {
-            var amenity = await unit.AmenityRepository.GetAsync(x => x.Id == obj.Amenity.Id);
+            var amenity = await amenityServices.GetAmenityById(obj.Amenity.Id);
             if (amenity is not null)
             {
-                await unit.AmenityRepository.RemoveAsync(amenity);
+                await amenityServices.Delete(amenity.Id);
                 TempData["Success"] = "The Amenity Has Been Deleted Successfully .";
                 return RedirectToAction("Index", "Amenity");
             }
