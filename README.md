@@ -18,24 +18,17 @@ MyProject is a .NET 8 web application built with Clean Architecture, integrating
 
 ## Project Structure
 
-MyProject
-│
-├── MyProject.Core       (Core domain logic and models)
-│   ├── Entities         (Domain entities)
-│   ├── Interfaces       (Interfaces for repositories, services, etc.)
-│   └── Services         (Domain services)
-│
-├── MyProject.Infrastructure    (Infrastructure implementations)
-│   ├── Data            (Data access layer)
-│   │   ├── Migrations  (Database migrations)
-│   │   └── Repositories (Concrete implementations of repositories)
-│   ├── ExternalServices  (External service integrations like Stripe)
-│   └── Identity        (Custom identity implementation)
-│
-├── MyProject.Web        (Web/UI layer)
-│   ├── Controllers     (ASP.NET Core MVC controllers)
-│   ├── Models          (ViewModels and DTOs)
-│   ├── Views           (HTML templates)
-│   └── wwwroot         (Static files like CSS, JS, images)
-│
-└── MyProject.Tests      (Unit and integration tests)
+This structure separates concerns into layers:
+
+- **Applicatiion**: Contains the core domain logic, including entities representing the business domain, interfaces defining contracts for repositories and services, and services implementing domain-specific logic.
+- **Domain Entities**: These are the building blocks of the application, representing the business objects and rules.
+- **Interfaces**: Defines contracts for repositories, services, and other components, promoting loose coupling and dependency inversion.
+- **Services**: Implements domain-specific logic, encapsulating behavior that operates on domain entities.
+- **Infrastructure**: Provides implementations for data access, external service integrations, and identity management. It includes the data access layer with database migrations and repository implementations.
+- **Web/UI**: Houses the web/UI layer, including controllers for handling HTTP requests, models for view models and DTOs, views containing HTML templates, and wwwroot for static files.
+- 
+This modular structure promotes maintainability, testability, and scalability of the Hotel Project.
+
+
+
+
